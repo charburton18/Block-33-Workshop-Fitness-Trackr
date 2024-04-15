@@ -1,15 +1,16 @@
 {
   "dependencies": {
+    "express": "^4.19.2",
     "nodemon": "^3.1.0",
     "pg": "^8.11.5"
   },
   "name": "block-33-workshop-fitness-trackr",
   "version": "1.0.0",
   "main": "index.js",
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon db/seed.js"
+    "start": "nodemon db/server.js",
+    "seed": "nodemon db/seed.js"
   },
   "author": "",
   "license": "ISC",
