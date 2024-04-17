@@ -3,6 +3,7 @@ const client = require('./client.js');
 const { reset } = require('nodemon');
 const { getActivities, getActivityById, createActivity, deleteActivityById } = require('./activities.js');
 const { getRoutines, getRoutineById, createRoutine, deleteRoutineById } = require('./routines.js');
+const { createRoutine_Activities } = require('./routines_activities.js');
 
 const app = express();
 
@@ -112,8 +113,17 @@ app.delete('/api/v1/routines/:routineId', async (req, res) => {
 
 // ROUTINES_ACTIVITIES
 
-// POST /api/v1/routines_activities/ - adds a new routines_activities to the database and sends the newly added routines_activities back 
-// DELETE /api/v1/activities/:activityId - removes an activity from the database and sends a successful or failed message
+// POST /api/v1/routines_activities - adds a new routines_activities to the database and sends the newly added routines_activities back
+app.post('/api/v1/routines_activities', async (req, res) => {
+  try {
+    const newRoutineActivity = await createRoutine_Activities(req.body.activities_id, req.body.routines_id, req.body.count);
+    res.send(newRoutineActivity);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+
 
 app.listen(8080, () => {
   console.log('Server listening on port 8080')
