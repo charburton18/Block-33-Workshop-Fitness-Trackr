@@ -1,19 +1,5 @@
 const client = require('./client.js');
 
-// POST /api/v1/activities - adds a new activity to the database and sends the newly added activity back
-const createActivity = async (activityName, activityDescription) => {
-  try {
-    const { rows: [newlyCreatedActivity] } = await client.query(`
-    INSERT INTO activities (name, description)
-    VALUES ('${activityName}', '${activityDescription}')
-    RETURNING *;
-    `);
-    return newlyCreatedActivity;
-  } catch (error) {
-    console.log(error);
-  }
-}
-
 //GET /api/v1/activities - sends back all activities in the activities table
 const getActivities = async () => {
   try {
@@ -39,13 +25,44 @@ const getActivityById = async (activityId) => {
   }
 };
 
+// POST /api/v1/activities - adds a new activity to the database and sends the newly added activity back
+const createActivity = async (activityName, activityDescription) => {
+  try {
+    const { rows: [newlyCreatedActivity] } = await client.query(`
+    INSERT INTO activities (name, description)
+    VALUES ('${activityName}', '${activityDescription}')
+    RETURNING *;
+    `);
+    return newlyCreatedActivity;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 // DELETE /api/v1/activities/:activityId - removes an activity from the database and sends a successful or failed message
-// * ADD CODE HERE *
-//
-//
+const deleteActivityById = async (activityId) => {
+  console.log('deleteActivity Func working so far');
+  try {
+    const { rows } = await client.query(`
+      DELETE FROM activities
+      WHERE id=${activityId}
+      RETURNING *;
+    `);
+    if(!rows || rows.length <= 0) {
+      return 'FAILED TO DELETE TABLE';
+    } else {
+      return 'SUCCESSFULLY DELETED TABLE';
+    }
+  } catch (err) {
+    console.log('ERROR WHILE DELETING TABLE', err);
+    return(`ERROR WHILE DELETING TABLE`);
+  }
+};
+
 
 module.exports = {
-  createActivity,
   getActivities,
-  getActivityById
+  getActivityById,
+  createActivity,
+  deleteActivityById
 };
